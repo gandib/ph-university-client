@@ -6,7 +6,6 @@ import {
 } from "../../../types";
 import { useState } from "react";
 import academicManagementApi from "../../../redux/features/admin/academicManagement.api";
-import { string } from "zod";
 
 export type TTableData = Pick<TAcademicDepartment & TAcademicFaculty, "name">;
 
