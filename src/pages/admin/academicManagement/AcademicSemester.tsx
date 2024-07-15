@@ -25,6 +25,18 @@ const AcademicSemester = () => {
     })
   );
 
+  const yearFilters: string[] = [];
+  tableData?.map((item) => {
+    if (yearFilters.includes(item.year) !== true) {
+      yearFilters.push(item.year);
+    }
+  });
+
+  const yearFilter = yearFilters?.map((item) => ({
+    text: item,
+    value: item,
+  }));
+
   const columns: TableColumnsType<TTableData> = [
     {
       title: "Name",
@@ -49,20 +61,7 @@ const AcademicSemester = () => {
       title: "Year",
       key: "year",
       dataIndex: "year",
-      filters: [
-        {
-          text: "2024",
-          value: "2024",
-        },
-        {
-          text: "2025",
-          value: "2025",
-        },
-        {
-          text: "2026",
-          value: "2026",
-        },
-      ],
+      filters: yearFilter,
     },
     {
       title: "Start Month",

@@ -6,6 +6,7 @@ import {
 } from "../../../types";
 import { useState } from "react";
 import academicManagementApi from "../../../redux/features/admin/academicManagement.api";
+import { string } from "zod";
 
 export type TTableData = Pick<TAcademicDepartment & TAcademicFaculty, "name">;
 
@@ -28,12 +29,24 @@ const AcademicDepartment = () => {
     text: name,
     value: name,
   }));
-  const tableData3 = tableData?.map(
-    ({ academicFaculty, academicFacultyId }) => ({
-      text: academicFaculty,
-      value: academicFacultyId,
-    })
-  );
+
+  const facultyFilters: string[] = [];
+  tableData?.map((item) => {
+    if (
+      facultyFilters.includes(
+        `${item.academicFaculty} & ${item.academicFacultyId}`
+      ) !== true
+    ) {
+      facultyFilters.push(
+        `${item.academicFaculty} & ${item.academicFacultyId}`
+      );
+    }
+  });
+
+  const facultyFilter = facultyFilters?.map((item) => ({
+    text: item.split(" & ")[0],
+    value: item.split(" & ")[1],
+  }));
 
   const columns: TableColumnsType<TTableData> = [
     {
@@ -50,7 +63,7 @@ const AcademicDepartment = () => {
       title: "Academic Faculty",
       key: "academicFaculty",
       dataIndex: "academicFaculty",
-      filters: tableData3,
+      filters: facultyFilter,
       filterSearch: true,
     },
 
