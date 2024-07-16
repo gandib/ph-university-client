@@ -5,9 +5,18 @@ import CreateAcademicDepartment from "../pages/admin/academicManagement/CreateAc
 import CreateAcademicFaculty from "../pages/admin/academicManagement/CreateAcademicFaculty";
 import CreateAcademicSemester from "../pages/admin/academicManagement/CreateAcademicSemester";
 import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminData from "../pages/admin/userManagement/AdminData";
+import AdminDetails from "../pages/admin/userManagement/AdminDetails";
+import AdminUpdate from "../pages/admin/userManagement/AdminUpdate";
 import CreateAdmin from "../pages/admin/userManagement/CreateAdmin";
 import CreateFaculty from "../pages/admin/userManagement/CreateFaculty";
 import CreateStudent from "../pages/admin/userManagement/CreateStudent";
+import FacultyData from "../pages/admin/userManagement/FacultyData";
+import FacultyDetails from "../pages/admin/userManagement/FacultyDetails";
+import FacultyUpdate from "../pages/admin/userManagement/FacultyUpdate";
+import StudentData from "../pages/admin/userManagement/StudentData";
+import StudentDetails from "../pages/admin/userManagement/StudentDetails";
+import StudentUpdate from "../pages/admin/userManagement/StudentUpdate";
 
 export const adminPaths = [
   {
@@ -59,14 +68,53 @@ export const adminPaths = [
         element: <CreateAdmin />,
       },
       {
+        name: "Admins",
+        path: "admins-data",
+        element: <AdminData />,
+      },
+      {
+        path: "admin-data/:adminId",
+        element: <AdminDetails />,
+      },
+      {
+        path: "admin-update/:adminId",
+        element: <AdminUpdate />,
+      },
+      {
         name: "Create Faculty",
         path: "create-faculty",
         element: <CreateFaculty />,
       },
       {
+        name: "Faculties",
+        path: "faculties-data",
+        element: <FacultyData />,
+      },
+      {
+        path: "faculty-data/:adminId",
+        element: <FacultyDetails />,
+      },
+      {
+        path: "faculty-update/:adminId",
+        element: <FacultyUpdate />,
+      },
+      {
         name: "Create Student",
         path: "create-student",
         element: <CreateStudent />,
+      },
+      {
+        name: "Students",
+        path: "students-data",
+        element: <StudentData />,
+      },
+      {
+        path: "student-data/:studentId",
+        element: <StudentDetails />,
+      },
+      {
+        path: "student-update/:studentId",
+        element: <StudentUpdate />,
       },
     ],
   },

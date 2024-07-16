@@ -1,63 +1,66 @@
-import { Controller, FieldValues, SubmitHandler } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import userManagementApi from "../../../redux/features/admin/userManagement.api";
+import { Button, Col, Divider, Row } from "antd";
 import PHForm from "../../../components/form/PHForm";
 import PHInput from "../../../components/form/PHInput";
-import { Button, Col, Divider, Form, Input, Row } from "antd";
 import PHSelect from "../../../components/form/PHSelect";
-import { bloodGroupOptions, genderOptions } from "../../../constants/global";
 import PHDatePicker from "../../../components/form/PHDatePicker";
-import academicManagementApi from "../../../redux/features/admin/academicManagement.api";
-import userManagementApi from "../../../redux/features/admin/userManagement.api";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import { TResponse } from "../../../types";
+import academicManagementApi from "../../../redux/features/admin/academicManagement.api";
+import { bloodGroupOptions, genderOptions } from "../../../constants/global";
 
-// This is only for development
-// should be removed
-const studentDefaultValues = {
-  name: {
-    firstName: "Tanni",
-    middleName: "Rani",
-    lastName: "Das",
-  },
-  gender: "female",
-  dateOfBirth: "",
-  bloodGroup: "O+",
+const StudentUpdate = () => {
+  const { studentId } = useParams();
+  const { data } = userManagementApi.useGetSingleStudentQuery(studentId);
 
-  email: "john@example1.com",
-  contactNo: "1234567890",
-  emergencyContactNo: "9876543210",
-  presentAddress: "123 Main Street, Cityville",
-  permanentAddress: "456 Oak Avenue, Townsville",
+  console.log(data);
 
-  guardian: {
-    fatherName: "Michael Smith",
-    fatherOccupation: "Engineer",
-    fatherContactNo: "1111111111",
-    motherName: "Emily Smith",
-    motherOccupation: "Doctor",
-    motherContactNo: "2222222222",
-  },
+  const studentDefaultValues = {
+    name: {
+      firstName: data?.data?.name?.firstName,
+      middleName: data?.data?.name?.middleName,
+      lastName: data?.data?.name?.lastName,
+    },
+    gender: data?.data?.gender,
 
-  localGuardian: {
-    name: "Alice Johnson",
-    occupation: "Teacher",
-    contactNo: "3333333333",
-    address: "789 Elm Street, Villageton",
-  },
-  admissionSemester: "66742a1fb4516f6006fa3314",
-  academicDepartment: "66742977b4516f6006fa3311",
-};
+    bloodGroup: data?.data?.bloodGroup,
 
-const CreateStudent = () => {
-  const [addStudent, { data, error }] =
-    userManagementApi.useAddStudentMutation();
+    email: data?.data?.email,
+    contactNo: data?.data?.contactNo,
+    emergencyContactNo: data?.data?.emergencyContactNo,
+    presentAddress: data?.data?.presentAddress,
+    permanentAddress: data?.data?.permanentAddress,
+
+    guardian: {
+      fatherName: data?.data?.guardian?.fatherName,
+      fatherOccupation: data?.data?.guardian?.fatherOccupation,
+      fatherContactNo: data?.data?.guardian?.fatherContactNo,
+      motherName: data?.data?.guardian?.motherName,
+      motherOccupation: data?.data?.guardian?.motherOccupation,
+      motherContactNo: data?.data?.guardian?.motherContactNo,
+    },
+
+    localGuardian: {
+      name: data?.data?.localGuardian?.name,
+      occupation: data?.data?.localGuardian?.occupation,
+      contactNo: data?.data?.localGuardian?.contactNo,
+      address: data?.data?.localGuardian?.address,
+    },
+    admissionSemester: data?.data?.admissionSemester?._id,
+    academicDepartment: data?.data?.academicDepartment?._id,
+  };
+
+  const [updateStudent, { data: updatedData, error }] =
+    userManagementApi.useUpdateStudentMutation();
+  console.log({ updatedData, error });
 
   const { data: sData, isLoading: sIsLoading } =
     academicManagementApi.useGetAllSemestersQuery(undefined);
 
   const { data: dData, isLoading: dIsLoading } =
     academicManagementApi.useGetAllDepartmentsQuery(undefined);
-
-  console.log({ data, error });
 
   const semesterOptions = sData?.data?.map((item) => ({
     value: item._id,
@@ -74,19 +77,25 @@ const CreateStudent = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     console.log(data);
     const studentData = {
-      password: "1234",
-      student: data,
+      id: studentId,
+      data: {
+        password: data?.password,
+        student: data,
+      },
     };
-    const formData = new FormData();
-    formData.append("data", JSON.stringify(studentData));
-    formData.append("file", data?.profileImg);
+    // const formData = new FormData();
+    // formData.append("data", JSON.stringify(studentData));
+    // formData.append("file", data?.profileImg);
+
+    console.log(studentData);
 
     const toastId = toast.loading("Loading...");
 
     try {
-      const res = (await addStudent(formData)) as TResponse<{
+      const res = (await updateStudent(studentData)) as TResponse<{
         message: string;
       }>;
+      console.log(res);
       if (res?.error) {
         toast.error(res.error.data.message, { id: toastId });
       } else {
@@ -97,7 +106,7 @@ const CreateStudent = () => {
     }
 
     // for development purpose to see data
-    console.log(Object.fromEntries(formData));
+    // console.log(Object.fromEntries(formData));
   };
 
   return (
@@ -129,6 +138,9 @@ const CreateStudent = () => {
               />
             </Col>
             <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
+              <PHInput type="password" name="password" label="Password" />
+            </Col>
+            {/* <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
               <Controller
                 name="profileImg"
                 render={({ field: { onChange, value, ...field } }) => (
@@ -142,7 +154,7 @@ const CreateStudent = () => {
                   </Form.Item>
                 )}
               />
-            </Col>
+            </Col> */}
 
             <Divider>Contact Information</Divider>
             <Col span={24} md={{ span: 12 }} lg={{ span: 8 }}>
@@ -266,4 +278,4 @@ const CreateStudent = () => {
   );
 };
 
-export default CreateStudent;
+export default StudentUpdate;

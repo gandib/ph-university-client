@@ -1,30 +1,31 @@
+import { TQueryParam, TResponseRedux, TStudent } from "../../../types";
 import { baseApi } from "../../api/baseApi";
 
 const userManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // getAllSemesters: builder.query({
-    //     query: (args) => {
-    //       const params = new URLSearchParams();
+    getAllStudents: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
 
-    //       if (args) {
-    //         args.forEach((item: TQueryParam) => {
-    //           params.append(item.name, item.value as string);
-    //         });
-    //       }
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
+          });
+        }
 
-    //       return {
-    //         url: "/academic-semesters",
-    //         method: "GET",
-    //         params: params,
-    //       };
-    //     },
-    //     transformResponse: (response: TResponseRedux<TAcademicSemester[]>) => {
-    //       return {
-    //         data: response.data,
-    //         meta: response.meta,
-    //       };
-    //     },
-    // }),
+        return {
+          url: "/students",
+          method: "GET",
+          params: params,
+        };
+      },
+      transformResponse: (response: TResponseRedux<TStudent[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+    }),
 
     addStudent: builder.mutation({
       query: (data) => ({
@@ -32,6 +33,86 @@ const userManagementApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+    }),
+
+    getSingleStudent: builder.query({
+      query: (id) => {
+        return {
+          url: `/students/${id}`,
+          method: "GET",
+        };
+      },
+    }),
+
+    updateStudent: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/students/${data?.id}`,
+          method: "PATCH",
+          body: data?.data,
+        };
+      },
+    }),
+
+    getAllAdmins: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/admins",
+          method: "GET",
+          params: params,
+        };
+      },
+      transformResponse: (response: TResponseRedux<TStudent[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+    }),
+
+    addAdmin: builder.mutation({
+      query: (data) => ({
+        url: "/users/create-admin",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    getSingleAdmin: builder.query({
+      query: (id) => {
+        return {
+          url: `/admins/${id}`,
+          method: "GET",
+        };
+      },
+    }),
+
+    updateAdmin: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/admins/${data?.id}`,
+          method: "PATCH",
+          body: data?.data,
+        };
+      },
+    }),
+
+    updateUserStatus: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/users/change-status/${data?.id}`,
+          method: "POST",
+          body: data?.status,
+        };
+      },
     }),
   }),
 });
