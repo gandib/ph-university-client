@@ -91,11 +91,11 @@ export const adminPaths = [
         element: <FacultyData />,
       },
       {
-        path: "faculty-data/:adminId",
+        path: "faculty-data/:facultyId",
         element: <FacultyDetails />,
       },
       {
-        path: "faculty-update/:adminId",
+        path: "faculty-update/:facultyId",
         element: <FacultyUpdate />,
       },
       {

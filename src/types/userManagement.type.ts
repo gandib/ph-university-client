@@ -81,6 +81,7 @@ export type TAdmin = {
   permanentAddress: string;
   profileImg: string;
   isDeleted: boolean;
+  fullName: string;
 };
 
 export type TFaculty = {
@@ -101,4 +102,5 @@ export type TFaculty = {
   academicDepartment: TAcademicDepartment;
   academicFaculty: TAcademicFaculty;
   isDeleted: boolean;
+  fullName: string;
 };

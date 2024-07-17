@@ -9,7 +9,7 @@ export type TTableData = Pick<TAcademicFaculty, "name">;
 const AcademicFaculty = () => {
   const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
   const { data: facultyData, isFetching } =
-    academicManagementApi.useGetAllFacultiesQuery(params);
+    academicManagementApi.useGetAllAcademicFacultiesQuery(params);
 
   const tableData = facultyData?.data?.map(({ _id, name }) => ({
     key: _id,

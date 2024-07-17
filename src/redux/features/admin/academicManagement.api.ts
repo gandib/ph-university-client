@@ -49,7 +49,7 @@ const academicManagementApi = baseApi.injectEndpoints({
       }),
     }),
 
-    getAllFaculties: builder.query({
+    getAllAcademicFaculties: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
 

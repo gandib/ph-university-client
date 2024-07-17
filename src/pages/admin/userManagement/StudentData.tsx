@@ -22,6 +22,7 @@ const StudentData = () => {
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [params, setParams] = useState<TQueryParam[]>([]);
+  const [studentId, setStudentId] = useState("");
 
   const { data: stdentData, isFetching } =
     userManagementApi.useGetAllStudentsQuery([
@@ -31,13 +32,14 @@ const StudentData = () => {
 
   const [updateUserStatus] = userManagementApi.useUpdateUserStatusMutation();
 
-  const showModal = () => {
+  const showModal = (id: string) => {
+    setStudentId(id);
     setOpen(true);
   };
-  const handleOk = async (id: string) => {
-    console.log(id);
+  const handleOk = async () => {
+    console.log(studentId);
     const data = {
-      id,
+      id: studentId,
       status: {
         status: "blocked",
       },
@@ -113,11 +115,11 @@ const StudentData = () => {
               <Button>Update</Button>
             </Link>
 
-            <Button onClick={showModal}>Block</Button>
+            <Button onClick={() => showModal(item?.id)}>Block</Button>
             <Modal
               open={open}
               title="Are you sure to block?"
-              onOk={() => handleOk(item?.key)}
+              onOk={handleOk}
               onCancel={handleCancel}
               footer={(_, { OkBtn, CancelBtn }) => (
                 <>

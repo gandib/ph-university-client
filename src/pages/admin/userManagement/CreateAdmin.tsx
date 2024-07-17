@@ -18,7 +18,7 @@ const adminDefaultValues = {
     lastName: "Roy",
   },
   designation: "Admin",
-  gender: "female",
+  gender: "male",
   dateOfBirth: "",
   bloodGroup: "O+",
 

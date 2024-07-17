@@ -11,7 +11,7 @@ import { TResponse } from "../../../types";
 
 const CreateAcademicDepartment = () => {
   const { data: facultyData } =
-    academicManagementApi.useGetAllFacultiesQuery(undefined);
+    academicManagementApi.useGetAllAcademicFacultiesQuery(undefined);
 
   const [addAcademicDepartment] =
     academicManagementApi.useAddAcademicDepartmentMutation();
