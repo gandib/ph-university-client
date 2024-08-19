@@ -165,6 +165,16 @@ const userManagementApi = baseApi.injectEndpoints({
         };
       },
     }),
+
+    changePassword: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/auth/change-password`,
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
   }),
 });
 

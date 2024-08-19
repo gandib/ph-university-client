@@ -30,7 +30,12 @@ const Login = () => {
 
       dispatch(setUser({ user: user, token: res.data.accessToken }));
       toast.success("Logged in successfully!", { id: toastId, duration: 2000 });
-      navigate(`/${user.role}/dashboard`);
+      console.log(res);
+      if (res?.data?.needsPassword) {
+        navigate(`/change-password`);
+      } else {
+        navigate(`/${user.role}/dashboard`);
+      }
     } catch (error) {
       toast.error("Somethiong went wrong!", { id: toastId, duration: 2000 });
     }

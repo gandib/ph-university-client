@@ -10,17 +10,20 @@ import { useState } from "react";
 import { daysOptions } from "../../../constants/global";
 import { toast } from "sonner";
 import { TResponse } from "../../../types";
+import PHTimePicker from "../../../components/form/PHTimePicker";
+import moment from "moment";
 
 const OfferCourse = () => {
   const [facultyId, setFacultyId] = useState("");
   const [courseId, setCourseId] = useState("");
 
-  const { data: allRegisteredSemester } =
+  const { data: semesterRegistrationData } =
     courseManagementApi.useGetAllRegisteredSemestersQuery([
-      { name: "sort", value: "-academicSemester" },
+      { name: "sort", value: "year" },
+      { name: "status", value: "UPCOMING" },
     ]);
 
-  const registeredSemesterOptions = allRegisteredSemester?.data?.map(
+  const registeredSemesterOptions = semesterRegistrationData?.data?.map(
     (item) => ({
       value: item._id,
       label: `${item.academicSemester.name} ${item.academicSemester.year} ${item.status}`,
@@ -35,10 +38,11 @@ const OfferCourse = () => {
     label: item.name,
   }));
 
-  const { data: academicDepartment } =
-    academicManagementApi.useGetAllDepartmentsQuery([
-      { name: "academicFaculty", value: facultyId },
-    ]);
+  const { data: academicDepartment, isFetching: fetchingDepartments } =
+    academicManagementApi.useGetAllDepartmentsQuery(
+      [{ name: "academicFaculty", value: facultyId }],
+      { skip: !facultyId }
+    );
 
   const academicDepartmentOptions = academicDepartment?.data?.map((item) => ({
     value: item._id,
@@ -53,8 +57,10 @@ const OfferCourse = () => {
     label: item.title,
   }));
 
-  const { data: faculties } =
-    courseManagementApi.useGetFacultiesWithCourseQuery(courseId);
+  const { data: faculties, isFetching: fetchingFaculties } =
+    courseManagementApi.useGetFacultiesWithCourseQuery(courseId, {
+      skip: !courseId,
+    });
 
   const facultyOptions = faculties?.data?.faculties.map((item) => ({
     value: item._id,
@@ -72,6 +78,8 @@ const OfferCourse = () => {
       ...data,
       maxCapacity: Number(data.maxCapacity),
       section: Number(data.section),
+      startTime: moment(new Date(data.startTime)).format("HH:mm"),
+      endTime: moment(new Date(data.endTime)).format("HH:mm"),
     };
     console.log(offerCourseData);
     try {
@@ -109,7 +117,7 @@ const OfferCourse = () => {
             label="Academic Department"
             name="academicDepartment"
             options={academicDepartmentOptions!}
-            disabled={!facultyId}
+            disabled={!facultyId || fetchingDepartments}
           />
           <PHSelectWithWatch
             onValueChange={setCourseId}
@@ -121,7 +129,7 @@ const OfferCourse = () => {
             label="Faculty"
             name="faculty"
             options={facultyOptions!}
-            disabled={!courseId}
+            disabled={!courseId || fetchingFaculties}
           />
           <PHInput type="text" name="maxCapacity" label="Max Capacity" />
           <PHInput type="text" name="section" label="Section" />
@@ -131,8 +139,8 @@ const OfferCourse = () => {
             name="days"
             options={daysOptions}
           />
-          <PHInput type="text" name="startTime" label="Start Time" />
-          <PHInput type="text" name="endTime" label="End Time" />
+          <PHTimePicker name="startTime" label="Start Time" />
+          <PHTimePicker name="endTime" label="End Time" />
           <Button htmlType="submit">Submit</Button>
         </PHForm>
       </Col>
