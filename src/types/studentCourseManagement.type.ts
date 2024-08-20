@@ -34,14 +34,14 @@ export type TMyOfferedCourse = {
 };
 export type TCompletedCourse = {
   _id: string;
-  semesterRegistration: string;
-  academicSemester: string;
-  academicFaculty: string;
-  academicDepartment: string;
-  offeredCourse: string;
-  course: string;
-  student: string;
-  faculty: string;
+  semesterRegistration: TSemesterRegistration;
+  academicSemester: TAcademicSemester;
+  academicFaculty: TAcademicFaculty;
+  academicDepartment: TAcademicDepartment;
+  offeredCourse: TOfferedCourse;
+  course: TCourse;
+  student: TStudent;
+  faculty: TFaculty;
   isEnrolled: boolean;
   courseMarks: TCourseMarks;
   grade: string;

@@ -1,4 +1,9 @@
-import { TMyOfferedCourse, TQueryParam, TResponseRedux } from "../../../types";
+import {
+  TCompletedCourse,
+  TMyOfferedCourse,
+  TQueryParam,
+  TResponseRedux,
+} from "../../../types";
 import { baseApi } from "../../api/baseApi";
 
 const studentCourseApi = baseApi.injectEndpoints({
@@ -25,14 +30,41 @@ const studentCourseApi = baseApi.injectEndpoints({
           meta: response.meta,
         };
       },
+      providesTags: ["offeredCourse"],
     }),
 
-    addStudent: builder.mutation({
+    getAllEnrolledCourses: builder.query({
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/enrolled-courses/my-enrolled-courses",
+          method: "GET",
+          params: params,
+        };
+      },
+      transformResponse: (response: TResponseRedux<TCompletedCourse[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
+      providesTags: ["offeredCourse"],
+    }),
+
+    enrollCourse: builder.mutation({
       query: (data) => ({
-        url: "/users/create-student",
+        url: "/enrolled-courses/create-enrolled-course",
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["offeredCourse"],
     }),
   }),
 });
