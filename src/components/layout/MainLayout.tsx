@@ -4,12 +4,14 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useAppDispatch } from "../../redux/hooks";
 import { logout } from "../../redux/features/auth/authSlice";
+import { baseApi } from "../../redux/api/baseApi";
 
 const MainLayout = () => {
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(baseApi.util.resetApiState());
   };
   return (
     <Layout style={{ minHeight: "100vh" }}>

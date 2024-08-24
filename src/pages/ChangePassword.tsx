@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useAppDispatch } from "../redux/hooks";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../redux/features/auth/authSlice";
+import { baseApi } from "../redux/api/baseApi";
 
 const ChangePassword = () => {
   const [changePassword] = userManagementApi.useChangePasswordMutation();
@@ -27,6 +28,7 @@ const ChangePassword = () => {
       console.log(res);
       if (res?.success) {
         dispatch(logout());
+        dispatch(baseApi.util.resetApiState());
         return navigate(`/login`);
       }
     } catch (error) {

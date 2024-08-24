@@ -10,7 +10,7 @@ import { RootState } from "../store";
 import { logout, setUser } from "../features/auth/authSlice";
 import { toast } from "sonner";
 
-const baseQuery = fetchBaseQuery({
+export const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5000/api/v1",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
@@ -58,6 +58,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
+      api.dispatch(baseApi.util.resetApiState());
     }
   }
 

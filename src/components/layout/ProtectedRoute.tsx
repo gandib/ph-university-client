@@ -7,6 +7,7 @@ import {
 } from "../../redux/features/auth/authSlice";
 import { Navigate } from "react-router-dom";
 import { verifyToken } from "../../utils/verifyToken";
+import { baseApi } from "../../redux/api/baseApi";
 
 type TProtectedRoute = {
   children: ReactNode;
@@ -25,6 +26,7 @@ const ProtectedRoute = ({ children, role }: TProtectedRoute) => {
   console.log(user);
   if (role !== undefined && role !== (user as TUser)?.role) {
     dispatch(logout());
+    dispatch(baseApi.util.resetApiState());
     return <Navigate to={"/login"} replace={true} />;
   }
 
